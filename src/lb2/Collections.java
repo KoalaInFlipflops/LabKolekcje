@@ -29,8 +29,10 @@ public class Collections {
         collectionCreator();
         int chosenAction = 0;
         int collectionsMenuChoice;
+        int removeChoice;
         Scanner scanner = new Scanner(System.in);
-        while (chosenAction != 3){
+        Scanner scanner2 = new Scanner(System.in);
+        while (chosenAction != 4){
             actionChoiceMenu();
             chosenAction = scanner.nextInt();
             if (chosenAction == 1) {
@@ -44,6 +46,40 @@ public class Collections {
                 collectionsMenuChoice = scanner.nextInt();
                 showCollection(collectionsMenuChoice);
 
+            }
+
+            if(chosenAction == 3) {
+                collectionsChoiceMenu();
+
+                collectionsMenuChoice = scanner.nextInt();
+                if(collectionsMenuChoice != 1 && collectionsMenuChoice != 2) {
+                    System.out.println("\nKtora osobe z kolei chcesz usunac?");
+                    removeChoice = scanner2.nextInt();
+                    //removeChoice-=1;
+                    remove(collectionsMenuChoice, removeChoice);
+                }
+                else{
+                    System.out.println("\nPodaj dane osoby ktora chcesz usunac");
+                    String remFirstName;
+                    String remLastName;
+                    int remAge;
+                    String remJob;
+                    scanner.nextLine();
+                    System.out.println("Imie:");
+                    remFirstName = scanner.nextLine();
+                    System.out.println("Nazwisko:");
+                    remLastName = scanner.nextLine();
+                    System.out.println("Praca:");
+                    remJob = scanner.nextLine();
+                    System.out.println("Wiek:");
+                    remAge = scanner.nextInt();
+
+
+                    Person remPerson = new Person(remFirstName, remLastName, remAge, remJob);
+                    PersonV2 remPersonV2 = new PersonV2(remFirstName, remLastName, remAge, remJob);
+
+                    removeSet(collectionsMenuChoice, remPerson, remPersonV2);
+                }
             }
 
         }
@@ -117,7 +153,8 @@ public class Collections {
         System.out.println("\n Main Menu:\n" +
                 "1. Dodaj element\n" +
                 "2. Wyswietl wybrana kolekcje\n" +
-                "3. Wyjdz\n");
+                "3. Usun element z kolekcji\n" +
+                "4. Wyjdz\n");
     }
 
     private void add(int a) {
@@ -167,6 +204,45 @@ public class Collections {
 
         }
     }
+
+    private void remove(int a, int b){
+        a-=2;
+
+        switch(a){
+            case 1:
+                b-=1;
+                PersonArrayList.remove(b);
+                PersonV2ArrayList.remove(b);
+                break;
+            case 2:
+                b-=1;
+                PersonLinkedList.remove(b);
+                PersonV2LinkedList.remove(b);
+                break;
+            case 3:
+                PersonHashMap.remove(b);
+                PersonV2HashMap.remove(b);
+                break;
+            case 4:
+                PersonTreeMap.remove(b);
+                PersonV2TreeMap.remove(b);
+        }
+    }
+
+
+    private void removeSet(int a, Person b, PersonV2 c){
+        switch(a){
+            case 1:
+                PersonHashSet.remove(b);
+                PersonV2HashSet.remove(c);
+                break;
+            case 2:
+                PersonTreeSet.remove(b);
+                PersonV2TreeSet.remove(c);
+                break;
+        }
+    }
+
 
     private void showCollection(int a) {
         String headLine = String.format("|%-20s|%-25s|%-20s|%-20s|", "Imie", "Nazwisko", "Wiek", "Praca");
@@ -267,9 +343,11 @@ public class Collections {
                 System.out.println(headLine);
                 System.out.println(breakLine);
 
-                for (int i = 1; i <= PersonHashMap.size(); i++) {
-                    String output = String.format("|%-20s|%-25s|%-20s|%-20s|", PersonHashMap.get(i).getFirstName(), PersonHashMap.get(i).getLastName(), PersonHashMap.get(i).getAge(), PersonHashMap.get(i).getJob());
-                    System.out.println(output);
+                for(Map.Entry<Integer, Person> e: PersonHashMap.entrySet()){
+                    Person person = e.getValue();
+                        String output = String.format("|%-20s|%-25s|%-20s|%-20s|", person.getFirstName(), person.getLastName(), person.getAge(), person.getJob());
+                        System.out.println(output);
+
                 }
 
                 System.out.println("\n" + colBreaker);
@@ -278,8 +356,9 @@ public class Collections {
                 System.out.println(headLine);
                 System.out.println(breakLine);
 
-                for (int i = 1; i <= PersonV2HashMap.size(); i++) {
-                    String output = String.format("|%-20s|%-25s|%-20s|%-20s|", PersonV2HashMap.get(i).getFirstName(), PersonV2HashMap.get(i).getLastName(), PersonV2HashMap.get(i).getAge(), PersonV2HashMap.get(i).getJob());
+                for(Map.Entry<Integer, PersonV2> e: PersonV2HashMap.entrySet()){
+                    PersonV2 person = e.getValue();
+                    String output = String.format("|%-20s|%-25s|%-20s|%-20s|", person.getFirstName(), person.getLastName(), person.getAge(), person.getJob());
                     System.out.println(output);
                 }
                 break;
@@ -289,10 +368,11 @@ public class Collections {
                 System.out.println(headLine);
                 System.out.println(breakLine);
 
-                for (int i = 1; i <= PersonTreeMap.size(); i++) {
-                    String output = String.format("|%-20s|%-25s|%-20s|%-20s|", PersonTreeMap.get(i).getFirstName(), PersonTreeMap.get(i).getLastName(), PersonTreeMap.get(i).getAge(), PersonTreeMap.get(i).getJob());
-                    System.out.println(output);
-                }
+                for(Map.Entry<Integer, Person> e: PersonTreeMap.entrySet()){
+                    Person person = e.getValue();
+                        String output = String.format("|%-20s|%-25s|%-20s|%-20s|", person.getFirstName(), person.getLastName(), person.getAge(),person.getJob());
+                        System.out.println(output);
+                    }
 
                 System.out.println("\n" + colBreaker);
 
@@ -300,9 +380,11 @@ public class Collections {
                 System.out.println(headLine);
                 System.out.println(breakLine);
 
-                for (int i = 1; i <= PersonV2TreeMap.size(); i++) {
-                    String output = String.format("|%-20s|%-25s|%-20s|%-20s|", PersonV2TreeMap.get(i).getFirstName(), PersonV2TreeMap.get(i).getLastName(), PersonV2TreeMap.get(i).getAge(), PersonV2TreeMap.get(i).getJob());
+                for(Map.Entry<Integer, PersonV2> e: PersonV2TreeMap.entrySet()){
+                    Person person = e.getValue();
+                    String output = String.format("|%-20s|%-25s|%-20s|%-20s|", person.getFirstName(), person.getLastName(), person.getAge(), person.getJob());
                     System.out.println(output);
+
                 }
                 break;
         }
